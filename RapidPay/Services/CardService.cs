@@ -33,8 +33,15 @@ public class CardService : ICardService
         return 0;
     }
 
-    public Task<bool> PayAsync(string cardNumber, decimal amount)
+    public async Task<bool> PayAsync(string cardNumber, decimal amount)
     {
-        throw new NotImplementedException();
+        var card = (await repository.GetWhere(c => c.CardNumber.Equals(cardNumber))).FirstOrDefault();
+        if(card != null)
+        {
+            card.Balance -= amount;
+            await repository.Update(card);
+            return true;
+        }
+        return false;
     }
 }
