@@ -27,12 +27,12 @@ namespace RapidPay.Controllers
             }
             catch (OperationCanceledException ex)
             {
-                return StatusCode(500, "Operation cancelled");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Operation cancelled");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, $"An error occurred {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred {ex.Message}");
             }
 
         }
@@ -50,12 +50,12 @@ namespace RapidPay.Controllers
             }
             catch (OperationCanceledException ex)
             {
-                return StatusCode(500, "Operation cancelled");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Operation cancelled");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, $"An error occurred {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred {ex.Message}");
             }
 
         }
