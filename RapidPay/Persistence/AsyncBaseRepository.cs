@@ -18,7 +18,7 @@
 
             #endregion
 
-            public AsyncBaseRepository(DbContext context)
+            public AsyncBaseRepository(RapidPayDbContext context)
             {
                 Context = context;
             }

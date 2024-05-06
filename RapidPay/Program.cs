@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
+using RapidPay.Persistence;
+using RapidPay.Persistence.Infrastructure.Data;
 using RapidPay.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +16,11 @@ builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 builder.Services.AddScoped<ICardService, CardService>();
-
+builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(AsyncBaseRepository<>));
+builder.Services.AddDbContext<RapidPayDbContext>(op =>
+{
+    op.UseInMemoryDatabase("RapidPayDb");
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

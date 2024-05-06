@@ -1,15 +1,36 @@
-﻿using RapidPay.Services.Base;
+﻿using RapidPay.Models;
+using RapidPay.Persistence;
+using RapidPay.Services.Base;
 
 public class CardService : ICardService
 {
-    public Task<string> CreateCardAsync()
+    private readonly IAsyncRepository<Card> repository;
+    public CardService(IAsyncRepository<Card> _repository)
     {
-        throw new NotImplementedException();
+        repository = _repository ?? throw new ArgumentNullException(nameof(repository));
+    }
+    public async Task<string> CreateCardAsync()
+    {
+        string cardNumber = GenerateRandomCardNumber();
+        await repository.Add(new Card() { CardNumber = cardNumber});
+        return cardNumber;
     }
 
-    public Task<decimal> GetCardBalanceAsync(string cardNumber)
+    private string GenerateRandomCardNumber()
     {
-        throw new NotImplementedException();
+        Random random = new Random();
+        var value = random.Next(1000, 9999);
+        return string.Concat("482029302939", value);
+    }
+
+    public async Task<decimal> GetCardBalanceAsync(string cardNumber)
+    {
+        var card = (await repository.GetWhere(c => c.CardNumber.Equals(cardNumber))).FirstOrDefault();
+        if(card != null)
+        {
+            return card.Balance;
+        }
+        return 0;
     }
 
     public Task<bool> PayAsync(string cardNumber, decimal amount)
