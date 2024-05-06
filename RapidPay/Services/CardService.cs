@@ -5,9 +5,11 @@ using RapidPay.Services.Base;
 public class CardService : ICardService
 {
     private readonly IAsyncRepository<Card> repository;
-    public CardService(IAsyncRepository<Card> _repository)
+    private readonly IPaymentFeeService paymentService;
+    public CardService(IAsyncRepository<Card> _repository, IPaymentFeeService _paymentService)
     {
         repository = _repository ?? throw new ArgumentNullException(nameof(repository));
+        paymentService = _paymentService ?? throw new ArgumentNullException(nameof(paymentService));
     }
     public async Task<string> CreateCardAsync()
     {
@@ -20,7 +22,7 @@ public class CardService : ICardService
     {
         Random random = new Random();
         var value = random.Next(1000, 9999);
-        return string.Concat("482029302939", value);
+        return string.Concat("48202930293", value);
     }
 
     public async Task<decimal> GetCardBalanceAsync(string cardNumber)
@@ -38,6 +40,7 @@ public class CardService : ICardService
         var card = (await repository.GetWhere(c => c.CardNumber.Equals(cardNumber))).FirstOrDefault();
         if(card != null)
         {
+            var fee = paymentService.CalculatePaymentFee(amount);
             card.Balance -= amount;
             await repository.Update(card);
             return true;

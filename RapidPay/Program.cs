@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using RapidPay.Persistence;
 using RapidPay.Persistence.Infrastructure.Data;
+using RapidPay.Services;
 using RapidPay.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<RapidPayDbContext>(op =>
 {
     op.UseInMemoryDatabase("RapidPayDb");
 });
+
+builder.Services.AddSingleton<IPaymentFeeService, PaymentFeeService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
