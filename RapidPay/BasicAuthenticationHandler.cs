@@ -31,7 +31,7 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
             )
         );
 
-        var authSplit = authBase64Decoded.Split(new char[] { ' ' });
+        var authSplit = authBase64Decoded.Split(new char[] { ':' });
         var username = authSplit[0];
         var password = authSplit[1];
 
