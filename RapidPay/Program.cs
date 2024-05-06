@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using RapidPay.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
+builder.Services.AddScoped<ICardService, CardService>();
 
 var app = builder.Build();
 

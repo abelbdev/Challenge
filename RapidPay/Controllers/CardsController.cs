@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RapidPay.Services;
+using RapidPay.Services.Base;
 
 namespace RapidPay.Controllers
 {

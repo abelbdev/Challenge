@@ -1,4 +1,4 @@
-﻿namespace RapidPay.Services
+﻿namespace RapidPay.Services.Base
 {
     public interface ICardService
     {
