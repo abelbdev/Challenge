@@ -2,7 +2,7 @@
 
 namespace RapidPay.Persistence
 {
-    public interface IAsyncRepository<T> where T : new()
+    public interface IAsyncRepository<T> where T : class
     {
 
         Task<T> GetById(int id);
