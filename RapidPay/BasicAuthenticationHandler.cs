@@ -45,7 +45,7 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
             return Task.FromResult(AuthenticateResult.Success(ticket));
         }
 
-        return Task.FromResult(AuthenticateResult.Fail("Invalid usernaem or pasword"));
+        return Task.FromResult(AuthenticateResult.Fail("Invalid username or password"));
 
     }
 }

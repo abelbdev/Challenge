@@ -11,10 +11,11 @@ public class CardService : ICardService
         repository = _repository ?? throw new ArgumentNullException(nameof(repository));
         paymentService = _paymentService ?? throw new ArgumentNullException(nameof(paymentService));
     }
-    public async Task<string> CreateCardAsync()
+    public async Task<string> CreateCardAsync(CancellationToken cancellationToken)
     {
         string cardNumber = GenerateRandomCardNumber();
-        await repository.Add(new Card() { CardNumber = cardNumber});
+        await repository.Add(new Card() { CardNumber = cardNumber}, cancellationToken);
+        var cards = await repository.GetAll();
         return cardNumber;
     }
 
@@ -35,14 +36,14 @@ public class CardService : ICardService
         return 0;
     }
 
-    public async Task<bool> PayAsync(string cardNumber, decimal amount)
+    public async Task<bool> PayAsync(string cardNumber, decimal amount, CancellationToken cancellationToken)
     {
         var card = (await repository.GetWhere(c => c.CardNumber.Equals(cardNumber))).FirstOrDefault();
         if(card != null)
         {
             var fee = paymentService.CalculatePaymentFee(amount);
-            card.Balance -= amount;
-            await repository.Update(card);
+            card.Balance -= (amount + fee);
+            await repository.Update(card, cancellationToken);
             return true;
         }
         return false;

@@ -30,18 +30,17 @@
             public Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate)
                 => Context.Set<T>().FirstOrDefaultAsync(predicate);
 
-            public async Task Add(T entity)
+            public async Task Add(T entity, CancellationToken cancellationToken)
             {
-                // await Context.AddAsync(entity);
                 await Context.Set<T>().AddAsync(entity);
-                await Context.SaveChangesAsync();
+                await Context.SaveChangesAsync(cancellationToken);
             }
 
-            public Task Update(T entity)
+            public Task Update(T entity, CancellationToken cancellationToken)
             {
                 // In case AsNoTracking is used
                 Context.Entry(entity).State = EntityState.Modified;
-                return Context.SaveChangesAsync();
+                return Context.SaveChangesAsync(cancellationToken);
             }
 
             public Task Remove(T entity)

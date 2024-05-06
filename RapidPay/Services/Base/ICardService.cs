@@ -2,8 +2,8 @@
 {
     public interface ICardService
     {
-        Task<string> CreateCardAsync();
-        Task<bool> PayAsync(string cardNumber, decimal amount);
+        Task<string> CreateCardAsync(CancellationToken cancellationToken);
+        Task<bool> PayAsync(string cardNumber, decimal amount, CancellationToken cancellationToken);
         Task<decimal> GetCardBalanceAsync(string cardNumber);
     }
 }

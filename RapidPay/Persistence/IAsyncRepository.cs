@@ -8,8 +8,8 @@ namespace RapidPay.Persistence
         Task<T> GetById(int id);
         Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);
 
-        Task Add(T entity);
-        Task Update(T entity);
+        Task Add(T entity, CancellationToken cancellationToken);
+        Task Update(T entity, CancellationToken cancellationToken);
         Task Remove(T entity);
 
         Task<IEnumerable<T>> GetAll();

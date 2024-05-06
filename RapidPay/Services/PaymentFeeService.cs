@@ -5,12 +5,14 @@ namespace RapidPay.Services
     public class PaymentFeeService : IPaymentFeeService
     {
         private readonly object lockObject = new object();
-        private decimal currentFee;
+        private decimal randomDecimal;
+        private decimal lastFeeAmount;
         private Timer timer;
 
         public PaymentFeeService()
         {
-            currentFee = GetRandomFee();
+            randomDecimal = GetRandomDecimal();
+            lastFeeAmount = 1; //Start random value
             timer = new Timer(UpdateFee, null, TimeSpan.Zero, TimeSpan.FromHours(1));
         }
 
@@ -18,12 +20,12 @@ namespace RapidPay.Services
         {
             lock(lockObject)
             {
-                currentFee = GetRandomFee();
-                Console.WriteLine($"Fee updated: {currentFee} at {DateTime.Now}");
+                randomDecimal = GetRandomDecimal();
+                Console.WriteLine($"Fee updated: {randomDecimal} at {DateTime.Now}");
             }
         }
 
-        private decimal GetRandomFee()
+        private decimal GetRandomDecimal()
         {
             var random = new Random();
             return (decimal)random.Next(0, 200) / 100;
@@ -31,14 +33,15 @@ namespace RapidPay.Services
 
         public decimal CalculatePaymentFee(decimal amount)
         {
-            return GetFee()*amount;
+            lastFeeAmount = GetFee() * amount;
+            return lastFeeAmount;
         }
 
         private decimal GetFee()
         {
             lock (lockObject)
             {
-                return currentFee/100;
+                return randomDecimal * lastFeeAmount;
             }
         }
     }
